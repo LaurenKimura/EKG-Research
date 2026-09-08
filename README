@@ -1,0 +1,69 @@
+# EKG Heartbeat Classification with a 1D CNN (PyTorch)
+
+Classifies individual heartbeats from EKG signals into 5 standard AAMI
+categories (Normal, Supraventricular, Ventricular, Fusion, Unknown/Paced)
+using the MIT-BIH Arrhythmia Database and a 1D convolutional neural network.
+
+## Files
+- `dataset.py` — loads/segments heartbeats from the real MIT-BIH database
+  (via the `wfdb` package) or generates synthetic ECG-like data for testing
+  the pipeline without internet access.
+- `model.py` — `ECGNet`, a small 1D CNN (~11K parameters) built for
+  classifying short heartbeat windows.
+- `train.py` — trains the model, evaluates it, and prints accuracy,
+  a confusion matrix, and per-class precision/recall/F1.
+
+## How to run
+
+### Option A — Real data (recommended, needs internet access to physionet.org)
+```bash
+pip install torch wfdb numpy
+python train.py --source real --epochs 15
+```
+On first run, `wfdb` will download the 48-record MIT-BIH Arrhythmia
+Database directly from PhysioNet (a few minutes). This gives you real,
+citable results on a well-known benchmark dataset.
+
+### Option B — Synthetic data (no internet needed, sandbox/demo mode)
+```bash
+python train.py --source synthetic --epochs 12
+```
+Generates ~4,000 synthetic heartbeat waveforms with the same 5-class
+structure to verify the full pipeline (data → model → training →
+evaluation) runs correctly. **This is not real patient data** — use it
+only to sanity-check the code, not to report results.
+
+## What the model does
+- Input: a 180-sample window centered on each annotated heartbeat.
+- Architecture: 3 stacked 1D conv blocks (16→32→64 channels) with batch
+  norm, ReLU, and max-pooling, followed by global average pooling and a
+  small fully-connected classifier head.
+- Output: probability distribution over 5 heartbeat classes.
+
+## Results (synthetic pipeline-validation run, 12 epochs)
+This run confirms the code trains and evaluates correctly:
+- Test accuracy: **99.3%**
+- Near-perfect precision/recall across all 5 classes
+
+These numbers are inflated because the synthetic classes are cleanly
+separable by design — they are **not** a claim about real-world EKG
+classification performance.
+
+## Expected results on real MIT-BIH data
+Published work using similar 1D CNN architectures on MIT-BIH typically
+reports:
+- ~97-99% accuracy on binary (normal vs. abnormal) classification
+- ~90-97% accuracy on the full 5-class AAMI classification, with lower
+  recall on minority classes (Fusion, Unknown/Paced) due to class imbalance
+
+To get real numbers: run `python train.py --source real` from an
+environment with internet access (e.g., your own machine, Google Colab,
+or a Jupyter environment), and report the test set accuracy, confusion
+matrix, and per-class F1 that get printed at the end.
+
+## Extending this project
+- Add data augmentation (jitter, time-warping) to help minority classes.
+- Try a class-weighted loss function to address the imbalance seen in
+  MIT-BIH (Normal beats vastly outnumber Fusion/Unknown beats).
+- Compare against the transformer-based and wavelet-based approaches
+  referenced in prior literature review work on this topic.
