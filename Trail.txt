@@ -1,0 +1,37 @@
+Model parameters: 11,397
+Epoch  1/15 | train_loss 0.2616 acc 0.9313 | val_loss 0.1567 acc 0.9590
+Epoch  2/15 | train_loss 0.1581 acc 0.9597 | val_loss 0.1327 acc 0.9661
+Epoch  3/15 | train_loss 0.1384 acc 0.9630 | val_loss 0.1381 acc 0.9622
+Epoch  4/15 | train_loss 0.1262 acc 0.9653 | val_loss 0.1006 acc 0.9721
+Epoch  5/15 | train_loss 0.1187 acc 0.9675 | val_loss 0.1087 acc 0.9686
+Epoch  6/15 | train_loss 0.1107 acc 0.9699 | val_loss 0.1052 acc 0.9730
+Epoch  7/15 | train_loss 0.1077 acc 0.9706 | val_loss 0.0901 acc 0.9776
+Epoch  8/15 | train_loss 0.1014 acc 0.9719 | val_loss 0.0903 acc 0.9762
+Epoch  9/15 | train_loss 0.1000 acc 0.9727 | val_loss 0.0835 acc 0.9772
+Epoch 10/15 | train_loss 0.0965 acc 0.9738 | val_loss 0.0905 acc 0.9768
+Epoch 11/15 | train_loss 0.0933 acc 0.9745 | val_loss 0.0837 acc 0.9775
+Epoch 12/15 | train_loss 0.0906 acc 0.9754 | val_loss 0.0888 acc 0.9764
+Epoch 13/15 | train_loss 0.0887 acc 0.9757 | val_loss 0.0861 acc 0.9769
+Epoch 14/15 | train_loss 0.0878 acc 0.9756 | val_loss 0.0745 acc 0.9801
+Epoch 15/15 | train_loss 0.0843 acc 0.9769 | val_loss 0.0814 acc 0.9792
+
+Final Test Results: loss 0.0814 | accuracy 0.9787
+
+Confusion Matrix (rows = true label, cols = predicted label)
+            Normal  Suprav  Ventri  Fusion  Unknow
+   Normal    13443      37      37      17      27
+Supravent      132     282       5       1       0
+Ventricul       45       1    1067      11       2
+   Fusion       17       0      12      80       0
+Unknown/P        2       0       3       0    1199
+
+Per-class metrics:
+Class              Precision    Recall      F1  Support
+Normal                 0.986     0.991   0.988    13561
+Supraventricular       0.881     0.671   0.762      420
+Ventricular            0.949     0.948   0.948     1126
+Fusion                 0.734     0.734   0.734      109
+Unknown/Paced          0.976     0.996   0.986     1204
+
+Saved trained weights to ecgnet_weights.pt
+PS C:\All-Projects\EKG\EKG-Research> 
